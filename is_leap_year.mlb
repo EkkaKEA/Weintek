@@ -1,0 +1,15 @@
+22 serialization::archive 14 1048577 12 is_leap_year 1 53656 104 12 is_leap_year 1 1 6 3 220 sub bool is_leap_year(int year)
+bool res = false
+if (year%4 <> 0) then
+   res = False
+else if (year%100 <> 0) then
+   res = true
+else if  (year%400 <> 0) then
+   res = False
+else
+   res = true
+end if
+
+return res
+
+end sub 0 0 

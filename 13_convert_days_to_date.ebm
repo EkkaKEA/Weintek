@@ -1,0 +1,66 @@
+﻿macro_definition_begin
+    "id": "13"
+    "name": "convert_days_to_date"
+    "startup": "false"
+    "periodic": [ "false" ]
+    "interlock": [ "false" ]
+macro_definition_end
+
+macro_command main()
+    // Определение стартовой даты
+int    day = 1
+int    month = 1
+int    year = 1990
+
+
+
+  // Определение количества дней в каждом месяце
+short    days_in_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+
+int days =0
+GetData(days, "PLC", DBn, 3020012, 1)
+
+// Вычисление дня, месяца и года
+day = day + days
+
+
+while true
+// Проверка на високосный год
+bool leap
+leap = is_leap_year(year)
+        if leap then
+            days_in_month[1] = 29
+        else
+            days_in_month[1] = 28
+        end if  
+        
+ // Если день превышает количество дней в текущем месяце
+ int oldmon = 0
+ oldmon = month-1
+ int days_in_m = 0
+ days_in_m = days_in_month[oldmon]
+ 
+ 
+        if day > days_in_m then
+            day = day - days_in_m
+            month =month + 1
+
+ // Если месяц превышает 12, увеличиваем год и устанавливаем месяц на январь
+            if month > 12 then
+                year = year + 1
+                month = 1
+            end if 
+        else
+            break        
+       end if 
+        
+          
+wend
+SetData(day, "Local HMI", "deyBB", 1)
+SetData(month, "Local HMI", "monthBB", 1)
+SetData(year, "Local HMI", "yearBB", 1)
+
+
+
+
+end macro_command
